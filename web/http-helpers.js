@@ -1,5 +1,6 @@
 var path = require('path');
 var fs = require('fs');
+var _ = require('underscore');
 var archive = require('../helpers/archive-helpers');
 
 exports.headers = headers = {
@@ -15,31 +16,34 @@ exports.serveAssets = function(res, asset, callback) {
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
 
-  // Generate the file path given asset and path module
-  // Generate the correct Content-Type given asset
-  // Call callback();
-
-  console.log('ATTEMPTING TO RETRIEVE: ' + asset);
-  console.log(path.resolve('', asset));
-  // fs.readFile('public/index.html', 'utf8', function(err, html) {
-
-  //   var headers = {"Content-Type": "text/html"};
-  //   _.extend(headers, httpHelpers.headers);
-
-  //   // If there's an err
-  //   if (err) {
-  //     console.log('FILE NOT FOUND');
-  //     res.writeHead(404, headers);
-  //     res.end(err);
-  //   }
-
-  //   console.log('FILE FOUND');
-  //   res.writeHead(200, headers);
-  //   console.log(html);
-    // res.write(html);
-    // res.end();
-  // });
+  var assetPath = __dirname + '/public/' + asset;
+  var extension = path.extname(asset);
+  var contentType = {};
   
+  if (extension === '.html') {
+    contentType["Content-Type"] = "text/html";
+  } else if (extension === '.css') {
+    contentType["Content-Type"] = "text/css"; 
+  }
+
+  fs.readFile(assetPath, 'utf8', function(err, html) {
+    console.log(html);
+    _.extend(headers, contentType);
+
+    if (err) {
+      console.log('FILE NOT FOUND: ' + err);
+      res.writeHead(404, headers);
+      res.end(err);
+    }
+
+    console.log('FILE FOUND');
+    res.writeHead(200, headers);
+    console.log(html);
+    res.write(html);
+    res.end(function() {
+      callback();
+    });
+  });
 };
 
   // Write some code here that helps serve up your static files!

@@ -5,29 +5,10 @@ var archive = require('../helpers/archive-helpers');
 var httpHelpers = require('./http-helpers');
 // require more modules/folders here!
 
-var extensions = ['.html', '.css', '.js'];
+var extensions = ['.html', '.css'];
 
 var handleGetRequest = function(req, res) {
-  if (req.url === '\/') {
-    fs.readFile('public/index.html', 'utf8', function(err, html) {
 
-      var headers = {"Content-Type": "text/html"};
-      _.extend(headers, httpHelpers.headers);
-
-      // If there's an err
-      if (err) {
-        console.log('FILE NOT FOUND');
-        res.writeHead(404, headers);
-        res.end(err);
-      }
-
-      console.log('FILE FOUND');
-      res.writeHead(200, headers);
-      console.log(html);
-      res.write(html);
-      res.end();
-    }); 
-  }
 };
 
 var handlePostRequest = function(req, res) {
