@@ -16,7 +16,7 @@ exports.serveAssets = function(res, asset, callback) {
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
 
-  var assetPath = __dirname + '/public/' + asset;
+  var assetPath = archive.paths.siteAssets + '/' + asset;
   var extension = path.extname(asset);
   var contentType = {};
   
@@ -26,8 +26,8 @@ exports.serveAssets = function(res, asset, callback) {
     contentType["Content-Type"] = "text/css"; 
   }
 
-  fs.readFile(assetPath, 'utf8', function(err, html) {
-    console.log(html);
+  fs.readFile(assetPath, 'utf8', function(err, data) {
+    console.log(data);
     _.extend(headers, contentType);
 
     if (err) {
@@ -38,8 +38,8 @@ exports.serveAssets = function(res, asset, callback) {
 
     console.log('FILE FOUND');
     res.writeHead(200, headers);
-    console.log(html);
-    res.write(html);
+    console.log(data);
+    res.write(data);
     res.end(function() {
       callback();
     });

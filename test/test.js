@@ -83,8 +83,6 @@ describe("archive helpers", function(){
       fs.writeFileSync(archive.paths.list, urlArray.join("\n"));
 
       archive.readListOfUrls(function(urls){
-        console.log('Our answer: ' + urls);
-        console.log('Correct answer: ' + urlArray);
         expect(urls).to.deep.equal(urlArray);
         done();
       });
@@ -144,7 +142,7 @@ describe("archive helpers", function(){
     });
   });
 
- xdescribe("#downloadUrls", function () {
+ describe("#downloadUrls", function () {
     it("should download all pending urls in the list", function (done) {
       var urlArray = ["www.example.com", "www.google.com"];
       archive.downloadUrls(urlArray);
@@ -153,7 +151,7 @@ describe("archive helpers", function(){
       setTimeout(function () {
         expect(fs.readdirSync(archive.paths.archivedSites)).to.deep.equal(urlArray);
         done();
-      }, 25);
+      }, 1000);
     });
   });
 });
