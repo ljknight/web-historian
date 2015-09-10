@@ -80,14 +80,15 @@ exports.addUrlToList = function(url, callback) {
           if (err) {
             console.log('Error at: ' + 'addUrlToList' + err);
           }
-          // Just added!
-          callback(true);
+          // Returns boolean to see if url is already archived
+          exports.isUrlArchived(url, callback);
+
         });
         // console.log('urls: ' + urls);
       });
     } else {
-      // Not added, because it already exists!
-      callback(false);
+      // Returns boolean to see if url is already archived
+      exports.isUrlArchived(url, callback);
     }
   });
 };

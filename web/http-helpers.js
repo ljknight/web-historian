@@ -38,17 +38,17 @@ exports.serveAssets = function(res, asset, callback) {
     if (err) {
       // console.log('FILE NOT FOUND: ' + err);
       res.writeHead(404, headers);
-      res.end(err);
+      res.end(err.toString());
+    } else {
+      // console.log('FILE FOUND');
+      res.writeHead(200, headers);
+      // console.log(data);
+      res.write(data);
+      res.end(function() {
+        // gives you more control over when the callback function is called
+        callback();
+      });
     }
-
-    // console.log('FILE FOUND');
-    res.writeHead(200, headers);
-    // console.log(data);
-    res.write(data);
-    res.end(function() {
-      // gives you more control over when the callback function is called
-      callback();
-    });
   });
 };
 

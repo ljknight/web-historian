@@ -3,6 +3,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var archive = require('../helpers/archive-helpers');
 var httpHelpers = require('./http-helpers');
+// var htmlFetcher = require('../workers/htmlfetcher');
 // require more modules/folders here!
 
 var extensions = ['.html', '.css'];
@@ -37,13 +38,25 @@ var handlePostRequest = function(req, res) {
     // console.log();
     res.writeHead(302, headers);
     // req.end();
-    res.end(function() {
-      archive.addUrlToList(data.slice(4), function(wasAdded) {
-        console.log('Was added (true) or already existing (false)?: ' + wasAdded);
+    // res.end(function() {
+      archive.addUrlToList(data.slice(4), function(isArchived, url) {
+        console.log('Is ' + url + ' archived?: ' + isArchived);
+        if (!isArchived) {
+          httpHelpers.serveAssets(res, 'loading.html', function() {
+            console.log('SHOULD LOAD LOADING.HTML');
+            // archive.downloadUrls([url]);
+            // htmlFetcher();
+          });
+        } else {
+          var urlParts = path.parse(url);
+          httpHelpers.serveAssets(res, urlParts['base'], function() {
+            console.log('SHOULD LOAD ARCHIVED FILE');
+          });
+        }
         // var fileContents = fs.readFileSync('/Users/student/Desktop/2015-08-web-historian/test/testdata/sites.txt', 'utf8');
         // console.log('What\'s in fileContents? '+ fileContents);
       })
-    });
+    // });
   });
 
   req.on('error', function(err) {
@@ -65,7 +78,7 @@ exports.handleRequest = function (req, res) {
     } else if (_.contains(extensions, urlParts['ext'])) {
       // Retrieving static assets
       httpHelpers.serveAssets(res, urlParts['base'], function() {
-        console.log('SHOULD FINISH CSS.HTML');
+        console.log('SHOULD FINISH SOME CSS ASSETS');
       });
     } else {
       handleGetRequest(req, res);

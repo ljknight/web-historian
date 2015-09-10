@@ -5,8 +5,24 @@
 </head>
 <body>
   Enter a URL here:
-  <form method="POST">
-    <input type="input" name="url"></input>
+  <form id='urlForm' method="POST">
+    <input id='url' type="input" name="url"></input>
   </form>
+  <script>
+    function stopDefAction(event) {
+      var charCode = event.keyCode;
+
+      // Enter key
+      if (event.which == 13 || charCode == 13) {
+        event.preventDefault();
+        document.getElementById('urlForm').submit();
+        return false;
+      }
+    }
+    
+    document.getElementById('url').addEventListener(
+      'keydown', stopDefAction, false
+    );
+  </script>
 </body>
 </html>
