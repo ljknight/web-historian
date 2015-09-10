@@ -25,7 +25,7 @@ describe("server", function() {
     });
   });
 
- xdescribe("archived websites", function () {
+ describe("archived websites", function () {
     describe("GET", function () {
       it("should return the content of a website from the archive", function (done) {
         var fixtureName = "www.google.com";
@@ -52,7 +52,7 @@ describe("server", function() {
       });
     });
 
-   xdescribe("POST", function () {
+   describe("POST", function () {
       it("should append submitted sites to 'sites.txt'", function(done) {
         var url = "www.example.com";
 
@@ -64,9 +64,20 @@ describe("server", function() {
           .type('form')
           .send({ url: url })
           .expect(302, function (err) {
+
+            // if (!err) {
+            //   var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
+            //   expect(fileContents).to.equal(url + "\n");
+            // }
+
+            // done(err);
+
+            // Ugly hack to wait for something.
             if (!err) {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
-              expect(fileContents).to.equal(url + "\n");
+              setTimeout(function () {
+                expect(fileContents).to.equal(url + "\n");
+              }, 2000);
             }
 
             done(err);

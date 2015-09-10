@@ -15,32 +15,38 @@ exports.serveAssets = function(res, asset, callback) {
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
-
-  var assetPath = archive.paths.siteAssets + '/' + asset;
+  
+  var assetPath = archive.paths.archivedSites + '/' + asset;
   var extension = path.extname(asset);
+
+  if (extension !== '.com') {
+    assetPath = archive.paths.siteAssets + '/' + asset;
+  }
+  
   var contentType = {};
   
-  if (extension === '.html') {
+  if (extension === '.html' || extension === '.com') {
     contentType["Content-Type"] = "text/html";
   } else if (extension === '.css') {
     contentType["Content-Type"] = "text/css"; 
   }
 
   fs.readFile(assetPath, 'utf8', function(err, data) {
-    console.log(data);
+    // console.log(data);
     _.extend(headers, contentType);
 
     if (err) {
-      console.log('FILE NOT FOUND: ' + err);
+      // console.log('FILE NOT FOUND: ' + err);
       res.writeHead(404, headers);
       res.end(err);
     }
 
-    console.log('FILE FOUND');
+    // console.log('FILE FOUND');
     res.writeHead(200, headers);
-    console.log(data);
+    // console.log(data);
     res.write(data);
     res.end(function() {
+      // gives you more control over when the callback function is called
       callback();
     });
   });

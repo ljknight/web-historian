@@ -47,11 +47,18 @@ exports.isUrlInList = function(url, callback) {
 
 // Returns nothing
 exports.addUrlToList = function(url, callback) {
+  console.log('addUrlToList: ' + url);
   exports.isUrlInList(url, function(exist) {
+    console.log('Does url exist?: ' + exist);
     if (!exist) {
       exports.readListOfUrls(function(urls) {
-        callback(urls.push(url));
+        console.log('Adding url: ' + url);
+        urls.push(url);
+        console.log('urls: ' + urls);
+        callback(false);
       });
+    } else {
+      callback(true);
     }
   });
 };
@@ -59,7 +66,7 @@ exports.addUrlToList = function(url, callback) {
 // Return boolean
 exports.isUrlArchived = function(url, callback) {
   fs.readdir(exports.paths.archivedSites, function(err, files) {
-    callback(_.contains(files, url));
+    callback(_.contains(files, url), url);
   })
 };
 
