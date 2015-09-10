@@ -30,9 +30,17 @@ exports.initialize = function(pathsObj) {
 exports.readListOfUrls = function(callback) {
   fs.readFile(exports.paths.list, 'utf8', function(err, data) {
     if (err) {
-      console.log('path not found' + err);
+      console.log('Path not found' + err);
       return err;
     } 
+
+    // Cleans array of empty elements
+    // console.log('DATA: ' + data);
+    // console.log('DATA SPLIT BY \\n: ' + data.split('\n'));
+    // console.log('DATA SPLIT BY \\n: ' + data.split('\n').length);
+    
+    // console.log('CLEANED ARRAY: ' + cleanedArray);
+    // console.log('CLEANED ARRAY SPLIT BY \\n: ' + cleanedArray.length);
     callback(data.split('\n'));
   });
 };
@@ -47,18 +55,39 @@ exports.isUrlInList = function(url, callback) {
 
 // Returns nothing
 exports.addUrlToList = function(url, callback) {
-  console.log('addUrlToList: ' + url);
+  // console.log('addUrlToList: ' + url);
   exports.isUrlInList(url, function(exist) {
-    console.log('Does url exist?: ' + exist);
+    // console.log('Does url exist?: ' + exist);
     if (!exist) {
       exports.readListOfUrls(function(urls) {
-        console.log('Adding url: ' + url);
+
+        // Cleaning url list of empty strings
+        for (var i = 0; i < urls.length; i++) {
+          if (urls[i] == '') {         
+            urls.splice(i, 1);
+            i--;
+          }
+        }
+        // console.log('Adding url: ' + url);
+        // console.log('Old array of urls: ' + urls);
+        // console.log('LENGTH: ' + urls.length);
         urls.push(url);
-        console.log('urls: ' + urls);
-        callback(false);
+        // console.log('New array of urls: ' + urls);
+        // console.log('LENGTH: ' + urls.length);
+        // console.log(urls.join("\n"));
+
+        fs.writeFile(exports.paths.list, urls.join("\n"), function(err) {
+          if (err) {
+            console.log('Error at: ' + 'addUrlToList' + err);
+          }
+          // Just added!
+          callback(true);
+        });
+        // console.log('urls: ' + urls);
       });
     } else {
-      callback(true);
+      // Not added, because it already exists!
+      callback(false);
     }
   });
 };
@@ -74,7 +103,7 @@ exports.isUrlArchived = function(url, callback) {
 // The passed in urls should be cleaned of already archived
 exports.downloadUrls = function(urls) {
   for (var i = 0; i < urls.length; i++) {
-    console.log('Attempting to archiving: ' + urls[i]);
+    // console.log('Attempting to archiving: ' + urls[i]);
     httpRequest.get({
       'url' : urls[i]
     }, exports.paths.archivedSites + '/' + urls[i], function(err, res) {

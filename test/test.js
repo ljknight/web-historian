@@ -65,22 +65,24 @@ describe("server", function() {
           .send({ url: url })
           .expect(302, function (err) {
 
-            // if (!err) {
-            //   var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
-            //   expect(fileContents).to.equal(url + "\n");
-            // }
-
-            // done(err);
-
-            // Ugly hack to wait for something.
             if (!err) {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
-              setTimeout(function () {
-                expect(fileContents).to.equal(url + "\n");
-              }, 2000);
+              expect(fileContents).to.equal(url + "\n");
             }
 
             done(err);
+
+            // Ugly hack to wait for something.
+            // if (!err) {
+            //   var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
+            //   console.log('Checking path: ' + archive.paths.list);
+            //   console.log('What\'s in fileContents? '+ fileContents);
+            //   setTimeout(function () {
+            //     expect(fileContents).to.equal(url + "\n");
+            //   }, 2000);
+            // }
+
+            // done(err);
           });
       });
     });
@@ -162,7 +164,7 @@ describe("archive helpers", function(){
       setTimeout(function () {
         expect(fs.readdirSync(archive.paths.archivedSites)).to.deep.equal(urlArray);
         done();
-      }, 1000);
+      }, 100);
     });
   });
 });

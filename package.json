@@ -11,7 +11,9 @@
     "q": "^1.0.0",
     "request": "^2.34.0",
     "supertest": "^0.15.0",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "http-request": "*",
+    "nodemon": "*"
   },
   "scripts": {
     "test": "mocha test",

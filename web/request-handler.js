@@ -39,7 +39,9 @@ var handlePostRequest = function(req, res) {
     // req.end();
     res.end(function() {
       archive.addUrlToList(data.slice(4), function(wasAdded) {
-        console.log('Already added?: ' + wasAdded);
+        console.log('Was added (true) or already existing (false)?: ' + wasAdded);
+        // var fileContents = fs.readFileSync('/Users/student/Desktop/2015-08-web-historian/test/testdata/sites.txt', 'utf8');
+        // console.log('What\'s in fileContents? '+ fileContents);
       })
     });
   });
