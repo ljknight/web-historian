@@ -1,2 +1,2 @@
 #web-historian
-This is a project I completed as a student at [hackreactor](http://hackreactor.com). This project was worked on with a pair.
+Multiple Node services that rely on command-line server processes like Cron to build a duplicate of the archive.org internet archiving website
